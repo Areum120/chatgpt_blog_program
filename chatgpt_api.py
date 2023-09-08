@@ -1,17 +1,20 @@
 
 import openai
-openai.api_key = ''
 
-messages = []
-while True:
-    content = input("User: ")
-    messages.append({"role": "user", "content":content})
+# API 요청 보내기
+def chat(prompt, api_key):
 
-    completion = openai.ChatCompletion.create(
+    openai.api_key = api_key
+    messages = [
+        {"role": "system", "content":"You are a helpful assistant"},
+        {"role": "user", "content":prompt}
+    ]
+
+    response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages = messages
+        messages=messages,
     )
+    return response.choices[0].message['content']
 
-    chat_response = completion.choices[0].messages.content
-    print(f'ChatGPT: {chat_response}')
-    messages.append({"role": "assistant", "content": chat_response})
+response = chat("집에서 할 수 있는 건강한 습관", "")
+print(response)
